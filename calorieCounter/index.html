@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" href="styles.css" />
-        <title> CalorieCounter</title>
-    </head>
-    <body>
-        <div class="content">
-            <header>
-                <h1>Leonard's Calorie Counter</h1>
-                <p>A simple calorie counter for tracking calorie intake</p>
-            </header>
-            <br/>
-            <section class="calorie-input">
-                <label for="budget">Budget</label>
-                <input type="number" id="budget" placeholder="input calorie goal...">
-                <div class="input-buttons">
-                    <button type="submit">Accept</button>
-                    <button type="button">Edit</button>
-                </div>
-            </section>
+  <head>
+    <link rel="stylesheet" href="styles.css" />
+    <title>CalorieCounter</title>
+  </head>
+  <body>
+    <div id="app">
+      <header class="header-section">
+        <h1>Calorie Tracker</h1>
+      </header>
+      <main id="content">
+        <form class="calorie-form">
+          <input class="input" />
+          <button type="submit" class="submitBtn">Submit</button>
+        </form>
+        <div>
+          <section class="day-card">
+            <h1 class="title">Monday</h1>
+            <article></article>
+          </section>
         </div>
-    </body>
+      </main>
+    </div>
+  </body>
 </html>

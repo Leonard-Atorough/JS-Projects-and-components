@@ -1,42 +1,72 @@
-* {
-    box-sizing: border-box;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+:root {
+  --black: #000;
+  --white: #fff;
+  --gray: #f8f8f8;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
 
 body {
-    margin: 0;
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+#app {
+  margin: 1rem auto;
+  max-width: 960px;
+}
+
+#content {
+  padding: 0 4rem;
+}
+
+.header-section {
+  text-align: center;
+  border: 2px solid var(--black);
+  box-shadow: 4px 4px black;
+  margin-bottom: 2rem;
+}
+
+.calorie-form {
+  display: flex;
+  height: 3rem;
+  gap: 1rem;
+  margin-bottom: 2rem;
+
+  > .input {
+    flex: 4;
+    border: 2px solid var(--black);
+    box-shadow: 4px 4px black;
+    font-size: 1.5rem;
+    padding: 0 0.5rem;
+
+    &:focus {
+      background-color: var(--gray);
+      outline: none;
+    }
+  }
+
+  > .submitBtn {
+    flex: 1;
+    background-color: transparent;
+    cursor: pointer;
     padding: 0;
-    color: #F5F5F5;
+    transition: all 0.3s ease;
+    &:hover {
+      background-color: var(--black);
+      color: var(--white);
+    }
+  }
 }
 
-header {
-    text-align: center;
-}
-
-header h1 {
-    font-size: 48px;
-    margin-bottom: 10px;
-}
-
-.content {
-max-width: 800px;
-min-height: 1200px;
-margin: 2px auto;
-padding: 20px;
-background-color: #333333;
-border-radius: 10px;
-}
-
-.calorie-input {
-    display: flex;
-    text-align: center;
-    justify-content: center;
-    gap: 20px;
-    height: 30px;
-    width: 100%;
-}
-
-.input-buttons {
-    display: flex;
-    height: 30px;
+.day-card {
+  border: 2px solid var(--black);
+  box-shadow: 4px 4px black;
+  padding: 0 1rem;
 }
