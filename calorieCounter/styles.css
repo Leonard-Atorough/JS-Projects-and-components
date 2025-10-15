@@ -1,0 +1,42 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    color: #F5F5F5;
+}
+
+header {
+    text-align: center;
+}
+
+header h1 {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.content {
+max-width: 800px;
+min-height: 1200px;
+margin: 2px auto;
+padding: 20px;
+background-color: #333333;
+border-radius: 10px;
+}
+
+.calorie-input {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    gap: 20px;
+    height: 30px;
+    width: 100%;
+}
+
+.input-buttons {
+    display: flex;
+    height: 30px;
+}

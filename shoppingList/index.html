@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Shopping List</title>
+    <script src="https://kit.fontawesome.com/3d2cce5ff6.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div id="app">
+      <header class="page-header">
+        <img
+          class="icon"
+          src="note.png"
+          alt="An image of a notepad to represent a shopping list"
+          aria-label="Shopping list image"
+        />
+        <h1 class="title">Shopping List</h1>
+      </header>
+      <form class="input-form" id="input-form">
+        <div class="entry section">
+          <input
+            id="item-input"
+            class="input"
+            type="text"
+            placeholder="Add a shopping list item..."
+          />
+          <button type="submit" class="btn">Submit</button>
+        </div>
+        <div class="section">
+          <select name="priority" class="input" id="priority">
+            <option value="0">Select a priority</option>
+            <option value="1">Low</option>
+            <option value="2">Medium</option>
+            <option value="3">High</option>
+          </select>
+        </div>
+        <div class="filter section">
+          <input class="input" id="filter-input" placeholder="Filter Shopping List..." />
+        </div>
+      </form>
+
+      <ul class="shopping-list"></ul>
+      <button class="btn-clear">Clear All</button>
+    </div>
+  </body>
+  <script src="app.js"></script>
+</html>

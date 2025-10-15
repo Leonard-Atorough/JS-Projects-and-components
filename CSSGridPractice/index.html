@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles/styles.css" />
+    <title>Grid Dashboard</title>
+  </head>
+  <body>
+    <header class="heading-section">
+      <h1 class="heading">Leonard's Dashboard</h1>
+      <ul class="actions">
+        <li>
+          <button class="action">Go Dark</button>
+        </li>
+      </ul>
+    </header>
+    <section class="container">
+      <div class="dashboard-tile -long" draggable="true">
+        <h2 class="title">Weather</h2>
+      </div>
+      <div class="dashboard-tile" draggable="true">
+        <div class="clock-component">
+          <canvas id="clock-face" class="face"></canvas>
+          <div id="clock" class="display">--:--:--</div>
+          <p id="timezone" class="timezone">GMT</p>
+        </div>
+      </div>
+      <div class="dashboard-tile"></div>
+    </section>
+    <script src="app.js"></script>
+  </body>
+</html>
