@@ -5,6 +5,7 @@
  @type {string[]}
  */
   const items = [];
+
   let filterTerm = "";
   let selectedItemIdx = null;
 
