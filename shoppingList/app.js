@@ -19,7 +19,6 @@
 
   // Rendering
   const render = () => {
-    console.log(items);
     const term = filterTerm.trim().toLowerCase();
 
     const visibleItems = term
@@ -35,6 +34,7 @@
       emptyMsg.textContent = `No items match “${filterTerm}”.`;
       _list.appendChild(emptyMsg);
     }
+    checkUI();
   };
 
   // Filtering
@@ -162,6 +162,18 @@
     render();
   };
 
+  // ui state
+
+  const checkUI = () => {
+    if (items.length <= 0) {
+      _filter.style.display = "none";
+      _clearBtn.style.display = "none";
+    } else {
+      _filter.style.display = "block";
+      _clearBtn.style.display = "block";
+    }
+  };
+
   // Attach handlers
 
   _form.addEventListener("submit", addOrUpdateItem);
@@ -180,7 +192,10 @@
 
   _filter.addEventListener("keydown", debounce(onFilterInput, 350));
 
-  document.addEventListener("DOMContentLoaded", loadFromLocalStorage);
+  document.addEventListener("DOMContentLoaded", () => {
+    loadFromLocalStorage();
+    checkUI();
+  });
 
   render();
 })();
