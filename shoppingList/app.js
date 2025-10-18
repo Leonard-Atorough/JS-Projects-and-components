@@ -4,10 +4,11 @@
   /**
  @type {string[]}
  */
-  const items = [];
+  let items = [];
 
   let filterTerm = "";
-  let selectedItemIdx = null;
+  let lastEditedItem = null;
+  let isEditMode = false;
 
   // constant dom references
   const _form = document.querySelector("#input-form");
@@ -35,6 +36,11 @@
       _list.appendChild(emptyMsg);
     }
     checkUI();
+  };
+
+  const restoreEditItemOnBlur = () => {
+    if (isEditMode && lastEditedItem.length > 0 && !items.includes(lastEditedItem))
+      addOrUpdateItem();
   };
 
   // Filtering
@@ -93,12 +99,7 @@
       dateUpdated: Date.now(),
     };
 
-    if (selectedItemIdx !== null) {
-      itemObj;
-      items[selectedItemIdx] = itemObj;
-    } else {
-      items.push(itemObj);
-    }
+    items.push(itemObj);
 
     sortItems();
     saveToLocalStorage();
@@ -107,19 +108,21 @@
     _input.value = "";
     _priority.value = 0;
     _input.focus();
-    selectedItemIdx = null;
+    isEditMode = false;
   };
 
   const selectEditItem = (item) => {
+    isEditMode = true;
     const savedItem = items.filter((x) => x.content === item.textContent)[0];
-    selectedItemIdx = items.indexOf(savedItem);
-    console.log(selectedItemIdx);
     _input.value = savedItem.content;
     _priority.value = savedItem.priority;
+    lastEditedItem = { content: savedItem.textContent, priority: savedItem.priority };
+    deleteItem(item);
+    _input.focus();
   };
 
-  const deleteItem = (index) => {
-    items.splice(index, 1);
+  const deleteItem = (item) => {
+    items = items.filter((x) => x.content !== item.textContent);
     sortItems();
     saveToLocalStorage();
     render();
@@ -146,9 +149,8 @@
   };
 
   // Persistence
-
-  const saveToLocalStorage = () => {
-    const parsedItems = JSON.stringify(items);
+  const saveToLocalStorage = (optItems = null) => {
+    const parsedItems = JSON.stringify(optItems || items);
     localStorage.setItem(LOCAL_STORAGE_KEY, parsedItems);
   };
 
@@ -178,11 +180,12 @@
 
   _form.addEventListener("submit", addOrUpdateItem);
 
+  _form.addEventListener("onblur", restoreEditItemOnBlur);
+
   _list.addEventListener("click", (e) => {
     const item = e.target.closest("li");
     if (e.target.closest(".delete")) {
-      const idx = [..._list.children].indexOf(item);
-      if (idx !== -1) deleteItem(idx);
+      deleteItem(item);
     } else {
       selectEditItem(item);
     }
