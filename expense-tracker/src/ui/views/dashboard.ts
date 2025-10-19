@@ -4,12 +4,20 @@ import { createExpenseRow } from "../components/expenseRow";
 
 export function initDashboard(root: HTMLElement) {
   const addExpenseForm = document.createElement("div");
-  addExpenseForm.className = "add-form";
+  addExpenseForm.id = "addExpenseForm";
+  addExpenseForm.className = "container";
   mountAddExpenseForm(addExpenseForm);
 
-  const tbody = document.createElement("tbody");
   const table = document.createElement("table");
-  table.appendChild(tbody);
+  const thead = document.createElement("thead");
+  const tbody = document.createElement("tbody");
+
+  const tr = document.createElement("tr");
+  thead.appendChild(tr);
+  createSummaryTableHeaders(tr);
+
+  table.append(thead, tbody);
+  table.style.padding = "1rem";
 
   const usubscribe = appStore.subscribe((state) => {
     tbody.innerHTML = "";
@@ -17,4 +25,12 @@ export function initDashboard(root: HTMLElement) {
   });
 
   root.append(addExpenseForm, table);
+}
+function createSummaryTableHeaders(headElement: HTMLTableRowElement) {
+  const headings = ["Description", "Amount", "Date", "Categories"];
+  headings.forEach((heading) => {
+    const el = document.createElement("th");
+    el.textContent = heading;
+    headElement.appendChild(el);
+  });
 }

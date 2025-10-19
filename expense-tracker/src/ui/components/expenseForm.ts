@@ -1,8 +1,11 @@
 import type { Expense } from "../../models/expense";
 import { appStore } from "../../state/store";
 
+import styles from "./expenseForm.module.css";
+
 export const mountAddExpenseForm = (container: HTMLElement): void => {
   const form = createForm();
+  form.classList.add(`${styles["add-form"]}`);
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -30,22 +33,26 @@ function createForm(): HTMLFormElement {
   let fragement = new DocumentFragment();
 
   const expenseDescription = document.createElement("input");
+  expenseDescription.classList.add(`${styles.input}`);
   expenseDescription.name = "desc";
   expenseDescription.placeholder = "Description...";
   expenseDescription.required = true;
 
   const expenseAmount = document.createElement("input");
+  expenseAmount.classList.add(`${styles.input}`);
   expenseAmount.name = "amount";
   expenseAmount.type = "number";
   expenseAmount.step = "0.01";
   expenseAmount.required = true;
 
   const expenseDate = document.createElement("input");
+  expenseDate.classList.add(`${styles.input}`);
   expenseDate.name = "date";
   expenseDate.type = "date";
   expenseDate.required = true;
 
   const button = document.createElement("button");
+  button.classList.add(`${styles.button}`);
   button.type = "submit";
   button.textContent = "Add";
 

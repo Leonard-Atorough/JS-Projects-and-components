@@ -1,0 +1,18 @@
+:root {
+  --base-font-size: 1em;
+  --scale-ratio: 1.333;
+  --font-size-1: clamp(14px, var(--base-font-size), 18px);
+  --font-size-2: clamp(18px, calc(var(--font-size-1) * var(--scale-ratio)), 24px);
+  --font-size-3: clamp(24px, calc(var(--font-size2) * var(var(--scale-ratio))), 32px);
+  --font-size-4: clamp(34px, calc(var(--font-size-3) * var(var(--scale-ratio))), 42px);
+  --font-size-5: clamp(46px, calc(var(--font-size-4) * var(var(--scale-ratio))), 54px);
+  --font-size-6: clamp(62px, calc(var(--font-size-5) * var(var(--scale-ratio))), 72px);
+  --font-size-7: clamp(, calc(var(--font-size-6) * var(var(--scale-ratio))));
+}
+
+p,
+input,
+textarea,
+button {
+  font-size: var(--font-size-1);
+}

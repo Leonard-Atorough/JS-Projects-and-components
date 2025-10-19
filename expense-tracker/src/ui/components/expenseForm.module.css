@@ -1,0 +1,39 @@
+input {
+  color: inherit;
+}
+.add-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  background-color: #fff;
+  border: 2px solid var(--text-50);
+  border-radius: 0.5rem;
+  box-shadow: 0 0 1rem var(--text-100);
+  transition: transform 0.1s ease;
+  min-height: 110px;
+  height: 100%;
+
+  &:hover,
+  &:focus-within {
+    transform: scale(1.01);
+    border: 2px sold var(--text-100);
+  }
+
+  > .input {
+    background-color: #fff;
+    border: 2px solid var(--text-50);
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    color: var(--text);
+  }
+
+  > .button {
+    height: 100%;
+    padding: 0 3rem;
+    border-radius: 0.25rem;
+    background-color: var(--primary);
+    border: none;
+  }
+}
