@@ -27,6 +27,8 @@ input {
     border-radius: 0.25rem;
     padding: 0.5rem;
     color: var(--text);
+    width: 100%;
+    text-overflow: ellipsis;
   }
 
   > .button {

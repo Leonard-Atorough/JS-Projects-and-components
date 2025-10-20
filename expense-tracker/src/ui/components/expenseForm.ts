@@ -9,12 +9,14 @@ export const mountAddExpenseForm = (container: HTMLElement): void => {
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
+
     const fd = new FormData(form);
     const newExpense: Expense = {
       id: crypto.randomUUID(),
       description: fd.get("desc") as string,
       amountCents: Math.round(parseFloat(fd.get("amount") as string) * 100),
       date: fd.get("date") as string,
+      category: fd.get("category") as string,
     };
 
     appStore.setState((prev) => ({
@@ -30,34 +32,78 @@ export const mountAddExpenseForm = (container: HTMLElement): void => {
 
 function createForm(): HTMLFormElement {
   const form = document.createElement("form");
-  let fragement = new DocumentFragment();
 
-  const expenseDescription = document.createElement("input");
-  expenseDescription.classList.add(`${styles.input}`);
-  expenseDescription.name = "desc";
-  expenseDescription.placeholder = "Description...";
-  expenseDescription.required = true;
+  const descInput = createInput({
+    name: "desc",
+    placeholder: "Description...",
+    required: true,
+  });
 
-  const expenseAmount = document.createElement("input");
-  expenseAmount.classList.add(`${styles.input}`);
-  expenseAmount.name = "amount";
-  expenseAmount.type = "number";
-  expenseAmount.step = "0.01";
-  expenseAmount.required = true;
+  const amountInput = createInput({
+    name: "amount",
+    type: "number",
+    step: "0.01",
+    required: true,
+  });
 
-  const expenseDate = document.createElement("input");
-  expenseDate.classList.add(`${styles.input}`);
-  expenseDate.name = "date";
-  expenseDate.type = "date";
-  expenseDate.required = true;
+  const dateInput = createInput({ name: "date", type: "date", required: true });
+
+  const categorySelect = createCategorySelect();
 
   const button = document.createElement("button");
   button.classList.add(`${styles.button}`);
   button.type = "submit";
   button.textContent = "Add";
 
-  fragement.append(expenseDescription, expenseAmount, expenseDate, button);
+  const fragement = new DocumentFragment();
+  fragement.append(descInput, amountInput, dateInput, categorySelect, button);
   form.appendChild(fragement);
 
   return form;
+}
+
+const createInput = (options: {
+  name: string;
+  type?: string;
+  placeholder?: string;
+  step?: string;
+  required?: boolean;
+}): HTMLInputElement => {
+  const input = document.createElement("input");
+  input.classList.add(`${styles.input}`);
+  input.name = options.name;
+  input.type = options.type ?? "text";
+  if (options.placeholder) input.placeholder = options.placeholder;
+  if (options.step) input.step = options.step;
+  if (options.required) input.required = options.required;
+  return input;
+};
+
+function createCategorySelect(): HTMLSelectElement {
+  const select = document.createElement("select");
+  select.classList.add(styles.input);
+  select.name = "category";
+
+  const DEFAULT_CATEGORY_MAP = [
+    "Food & Drink",
+    "Transportation",
+    "Housing",
+    "Health & Wellness",
+    "Entertainment",
+    "Travel",
+    "Education",
+    "Personal Care",
+    "Pets",
+    "Savings & Investments",
+    "Miscellaneous",
+    "Other",
+  ];
+
+  for (const category of DEFAULT_CATEGORY_MAP) {
+    const option = document.createElement("option");
+    option.value = category;
+    option.textContent = category;
+    select.appendChild(option);
+  }
+  return select;
 }

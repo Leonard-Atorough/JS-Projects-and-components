@@ -14,19 +14,19 @@ export const createExpenseRow = (
 
   const desc = document.createElement("td");
   desc.textContent = expense.description;
-  desc.classList.add(`${styles["row"]}`);
+  desc.classList.add(styles.row);
 
   const amnt = document.createElement("td");
   amnt.textContent = (expense.amountCents / 100).toFixed(2).toString();
-  amnt.classList.add(`${styles["row"]}`);
+  amnt.classList.add(styles.row);
 
   const date = document.createElement("td");
   date.textContent = expense.date;
-  date.classList.add(`${styles["row"]}`);
+  date.classList.add(styles.row);
 
   const category = document.createElement("td");
   category.textContent = expense.category ?? "(Empty)";
-  category.classList.add(`${styles["row"]}`);
+  category.classList.add(styles.row);
 
   fragement.append(desc, amnt, date, category);
   tableRow.appendChild(fragement);

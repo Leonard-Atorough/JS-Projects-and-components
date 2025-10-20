@@ -1,0 +1,8 @@
+.header-banner {
+  color: var(--background);
+  box-shadow: 0 0 1rem var(--text-100);
+  background-color: var(--text);
+  > .title {
+    margin: 2rem 0;
+  }
+}

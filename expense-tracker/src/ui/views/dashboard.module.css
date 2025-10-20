@@ -1,5 +1,6 @@
 .expense-table {
   border: 2px solid var(--primary);
+  margin: 0 2rem;
 }
 
 .expense-table-heading {
