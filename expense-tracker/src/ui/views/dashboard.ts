@@ -24,7 +24,7 @@ export async function initDashboard(): Promise<HTMLDivElement> {
 function BuildUI() {
   const addExpenseForm = document.createElement("div");
   addExpenseForm.id = "addExpenseForm";
-  addExpenseForm.className = "container";
+  addExpenseForm.className = styles["expense-form-container"];
   mountAddExpenseForm(addExpenseForm);
 
   const table = document.createElement("table");

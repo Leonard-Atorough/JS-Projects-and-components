@@ -12,30 +12,20 @@ export const createExpenseRow = (
 
   const fragement = new DocumentFragment();
 
-  const desc = document.createElement("td");
-  desc.textContent = expense.description;
-  desc.classList.add(styles.row);
-
-  const amnt = document.createElement("td");
-  amnt.textContent = (expense.amountCents / 100).toFixed(2).toString();
-  amnt.classList.add(styles.row);
-
-  const date = document.createElement("td");
-  date.textContent = expense.date;
-  date.classList.add(styles.row);
-
-  const category = document.createElement("td");
-  category.textContent = expense.category ?? "(Empty)";
-  category.classList.add(styles.row);
+  const desc = createTableRow({ content: expense.description });
+  const amnt = createTableRow({ content: (expense.amountCents / 100).toFixed(2).toString() });
+  const date = createTableRow({ content: expense.date });
+  const category = createTableRow({ content: expense.category ?? "(Empty)" });
 
   fragement.append(desc, amnt, date, category);
   tableRow.appendChild(fragement);
 
   return tableRow;
+};
 
-  //   const elements: string[] = Array.from(Object.values(expense));
-  //   elements.forEach((element) => {
-  //     const td = document.createElement("td");
-  //     td.textContent = element;
-  //   });
+const createTableRow = (options: { content: string }): HTMLTableCellElement => {
+  const cell = document.createElement("td");
+  cell.textContent = options.content;
+  cell.classList.add(styles.row);
+  return cell;
 };

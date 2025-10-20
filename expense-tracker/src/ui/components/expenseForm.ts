@@ -4,9 +4,12 @@ import { appStore } from "../../state/store";
 import styles from "./expenseForm.module.css";
 
 export const mountAddExpenseForm = (container: HTMLElement): Promise<void> => {
+  const formTitle = document.createElement("h2");
+  formTitle.textContent = "Add Expense";
   const form = createForm();
   form.classList.add(`${styles["add-form"]}`);
-  container.appendChild(form);
+
+  container.append(formTitle, form);
 
   return attachFormHandler(form);
 };
