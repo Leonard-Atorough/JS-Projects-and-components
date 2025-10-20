@@ -4,7 +4,7 @@ import { createExpenseRow } from "../components/expenseRow";
 
 import styles from "./dashboard.module.css";
 
-export function initDashboard(root: HTMLElement) {
+export function initDashboard(): HTMLDivElement {
   const { tbody, addExpenseForm, table } = BuildUI();
 
   const usubscribe = appStore.subscribe((state) => {
@@ -14,7 +14,11 @@ export function initDashboard(root: HTMLElement) {
     );
   });
 
-  root.append(addExpenseForm, table);
+  const dashboard = document.createElement("div");
+  dashboard.classList.add(styles["dashboard-view"]);
+  dashboard.append(addExpenseForm, table);
+
+  return dashboard;
 }
 
 function BuildUI() {
@@ -24,7 +28,7 @@ function BuildUI() {
   mountAddExpenseForm(addExpenseForm);
 
   const table = document.createElement("table");
-  table.classList.add(`${styles["expense-table"]}`);
+  table.classList.add(styles["expense-table"]);
 
   const thead = document.createElement("thead");
   const headerRow = document.createElement("tr");
