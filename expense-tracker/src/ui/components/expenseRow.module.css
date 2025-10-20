@@ -1,7 +1,7 @@
 .expense-table-row {
   background-color: #fff;
   &.-alternate {
-    background-color: var(--background-200);
+    background-color: var(--background-100);
   }
   > .row {
     padding: 1rem;

@@ -45,7 +45,7 @@ describe("When mountAddExpenseForm is called", () => {
 });
 
 describe("when the add button is clicked on mountAddExpenseForm", () => {
-  it("adds a new expense to the store when it is submitted", () => {
+  it("adds a new expense to the store when it is submitted", async () => {
     mountAddExpenseForm(container);
 
     const form = container.querySelector("form");
@@ -57,7 +57,7 @@ describe("when the add button is clicked on mountAddExpenseForm", () => {
 
     form?.dispatchEvent(new Event("submit"));
 
-    const state = appStore.getState();
+    const state = (await appStore).getState();
 
     expect(state.expenses).toHaveLength(1);
     const added: Expense = state.expenses[0];
@@ -67,8 +67,8 @@ describe("when the add button is clicked on mountAddExpenseForm", () => {
     expect(added.date).toBe("2025-10-19");
   });
 
-  it("clears the input field after a successful submission", () => {
-    mountAddExpenseForm(container);
+  it("clears the input field after a successful submission", async () => {
+    const mountPromise = mountAddExpenseForm(container);
 
     const form = container.querySelector("form");
     const [desc, amount, date] = Array.from(form!.querySelectorAll("input"));
@@ -78,6 +78,8 @@ describe("when the add button is clicked on mountAddExpenseForm", () => {
     date.value = "2025-10-19";
 
     form?.dispatchEvent(new Event("submit"));
+
+    await mountPromise;
 
     expect(desc.value).toBe("");
     expect(amount.value).toBe("");

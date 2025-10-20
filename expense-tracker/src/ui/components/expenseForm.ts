@@ -3,32 +3,37 @@ import { appStore } from "../../state/store";
 
 import styles from "./expenseForm.module.css";
 
-export const mountAddExpenseForm = (container: HTMLElement): void => {
+export const mountAddExpenseForm = (container: HTMLElement): Promise<void> => {
   const form = createForm();
   form.classList.add(`${styles["add-form"]}`);
-
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const fd = new FormData(form);
-    const newExpense: Expense = {
-      id: crypto.randomUUID(),
-      description: fd.get("desc") as string,
-      amountCents: Math.round(parseFloat(fd.get("amount") as string) * 100),
-      date: fd.get("date") as string,
-      category: fd.get("category") as string,
-    };
-
-    appStore.setState((prev) => ({
-      ...prev,
-      expenses: [...prev.expenses, newExpense],
-    }));
-
-    form.reset();
-  });
-
   container.appendChild(form);
+
+  return attachFormHandler(form);
 };
+
+function attachFormHandler(form: HTMLFormElement): Promise<void> {
+  return new Promise<void>((resolve) => {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const fd = new FormData(form);
+      const newExpense: Expense = {
+        id: crypto.randomUUID(),
+        description: fd.get("desc") as string,
+        amountCents: Math.round(parseFloat(fd.get("amount") as string) * 100),
+        date: fd.get("date") as string,
+        category: fd.get("category") as string,
+      };
+
+      (await appStore).setState((prev) => ({
+        ...prev,
+        expenses: [...prev.expenses, newExpense],
+      }));
+      form.reset();
+      resolve();
+    });
+  });
+}
 
 function createForm(): HTMLFormElement {
   const form = document.createElement("form");

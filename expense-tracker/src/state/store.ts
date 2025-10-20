@@ -1,9 +1,9 @@
-import { loadExpensesFromLocal, saveExpensesToLocal } from "../services/storage";
+import { loadExpenseAsync, saveExpensesToLocal } from "../services/storage";
 import type { AppState } from "./types";
 
-export function createStore(InitialPartial: Partial<AppState> = {}) {
+export async function createStore(InitialPartial: Partial<AppState> = {}) {
   let state: AppState = {
-    expenses: loadExpensesFromLocal(),
+    expenses: await loadExpenseAsync(),
     isLoading: false,
     ...InitialPartial,
   };

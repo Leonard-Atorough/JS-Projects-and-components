@@ -4,10 +4,10 @@ import { createExpenseRow } from "../components/expenseRow";
 
 import styles from "./dashboard.module.css";
 
-export function initDashboard(): HTMLDivElement {
+export async function initDashboard(): Promise<HTMLDivElement> {
   const { tbody, addExpenseForm, table } = BuildUI();
 
-  const usubscribe = appStore.subscribe((state) => {
+  const usubscribe = (await appStore).subscribe((state) => {
     tbody.innerHTML = "";
     state.expenses.forEach((expense, idx) =>
       tbody.appendChild(createExpenseRow(expense, idx % 2 !== 0))

@@ -24,8 +24,8 @@ beforeEach(() => {
 });
 
 describe("getState", () => {
-  it("returns a shallow copy of the initial app state", () => {
-    const snapshot = store.getState();
+  it("returns a shallow copy of the initial app state", async () => {
+    const snapshot = (await store).getState();
 
     expect(snapshot).toEqual({
       expenses: [
@@ -40,12 +40,12 @@ describe("getState", () => {
     });
 
     snapshot.isLoading = true;
-    expect(store.getState().isLoading).toBe(false);
+    expect((await store).getState().isLoading).toBe(false);
   });
 });
 
 describe("setState", () => {
-  it("updates and mutates the app state", () => {
+  it("updates and mutates the app state", async () => {
     const newExpense = {
       id: "3",
       description: "Chocolate bar",
@@ -53,24 +53,24 @@ describe("setState", () => {
       date: "2025-06-21",
     };
 
-    store.setState((prev) => ({
+    (await store).setState((prev) => ({
       ...prev,
       expenses: [...prev.expenses, newExpense],
     }));
 
-    expect(store.getState().expenses).contains(newExpense);
+    expect((await store).getState().expenses).contains(newExpense);
   });
 });
 
 describe("subscribe", () => {
-  it("adds a callback function to an subscriber pool that is called when state changes", () => {
+  it("adds a callback function to an subscriber pool that is called when state changes", async () => {
     const calls: AppState[] = [];
-    const unsub = store.subscribe((state) => calls.push(state));
+    const unsub = (await store).subscribe((state) => calls.push(state));
 
     expect(calls).toHaveLength(1);
     expect(calls[0].isLoading).toBe(false);
 
-    store.setState((prev) => ({
+    (await store).setState((prev) => ({
       ...prev,
       isLoading: true,
     }));

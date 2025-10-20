@@ -4,7 +4,7 @@ import { initHeader } from "./ui/layout/header";
 import { initMain } from "./ui/layout/main";
 import { initDashboard } from "./ui/views/dashboard";
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const appRoot = document.getElementById("app");
   if (!appRoot) {
     console.error("Missing app root element: #app");
@@ -14,5 +14,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initHeader(appRoot);
   initAside(appRoot);
   const dashboardView = initDashboard();
-  initMain(appRoot, dashboardView);
+  initMain(appRoot, await dashboardView);
 });
