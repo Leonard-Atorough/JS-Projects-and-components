@@ -7,10 +7,12 @@ export function initHeader(root: HTMLElement) {
 
     const title = document.createElement("h1");
     title.textContent = "Expenses Dashboard";
-    title.classList.add(`${styles["title"]}`);
+    title.classList.add(styles.title);
 
     header.append(title);
-    root.appendChild(header);
+    const rootParent = root.parentNode;
+
+    rootParent?.insertBefore(header, root);
   };
 
   render();
