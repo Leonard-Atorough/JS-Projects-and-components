@@ -1,5 +1,6 @@
 @import url("./_colors.css");
 @import url("./_typography.css");
+@import url("./_base.css");
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;

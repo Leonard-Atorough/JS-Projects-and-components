@@ -2,34 +2,46 @@ import { appStore } from "../../state/store";
 import { mountAddExpenseForm } from "../components/expenseForm";
 import { createExpenseRow } from "../components/expenseRow";
 
+import styles from "./dashboard.module.css";
+
 export function initDashboard(root: HTMLElement) {
+  const { tbody, addExpenseForm, table } = BuildUI();
+
+  const usubscribe = appStore.subscribe((state) => {
+    tbody.innerHTML = "";
+    state.expenses.forEach((expense, idx) =>
+      tbody.appendChild(createExpenseRow(expense, idx % 2 !== 0))
+    );
+  });
+
+  root.append(addExpenseForm, table);
+}
+
+function BuildUI() {
   const addExpenseForm = document.createElement("div");
   addExpenseForm.id = "addExpenseForm";
   addExpenseForm.className = "container";
   mountAddExpenseForm(addExpenseForm);
 
   const table = document.createElement("table");
+  table.classList.add(`${styles["expense-table"]}`);
+
   const thead = document.createElement("thead");
+  const headerRow = document.createElement("tr");
+  thead.appendChild(headerRow);
+  createSummaryTableHeaders(headerRow);
+
   const tbody = document.createElement("tbody");
 
-  const tr = document.createElement("tr");
-  thead.appendChild(tr);
-  createSummaryTableHeaders(tr);
-
   table.append(thead, tbody);
-  table.style.padding = "1rem";
-
-  const usubscribe = appStore.subscribe((state) => {
-    tbody.innerHTML = "";
-    state.expenses.forEach((expense) => tbody.appendChild(createExpenseRow(expense)));
-  });
-
-  root.append(addExpenseForm, table);
+  return { tbody, addExpenseForm, table };
 }
+
 function createSummaryTableHeaders(headElement: HTMLTableRowElement) {
-  const headings = ["Description", "Amount", "Date", "Categories"];
+  const headings = ["DESCRIPTION", "AMOUNT", "DATE", "CATEGORY"];
   headings.forEach((heading) => {
     const el = document.createElement("th");
+    el.classList.add(`${styles["expense-table-heading"]}`);
     el.textContent = heading;
     headElement.appendChild(el);
   });

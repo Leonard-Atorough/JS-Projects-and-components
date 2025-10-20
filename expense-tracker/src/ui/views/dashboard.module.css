@@ -1,0 +1,10 @@
+.expense-table {
+  border: 2px solid var(--primary);
+}
+
+.expense-table-heading {
+  padding: 1rem;
+  background-color: var(--primary);
+  color: var(--background);
+  font-size: var(--font-size-1);
+}

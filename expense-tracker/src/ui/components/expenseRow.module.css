@@ -1,0 +1,8 @@
+.expense-table-row {
+  &.-alternate {
+    background-color: var(--background-100);
+  }
+  > .row {
+    padding: 1rem;
+  }
+}
