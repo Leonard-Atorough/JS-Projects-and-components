@@ -3,7 +3,20 @@
   &.-alternate {
     background-color: var(--background-100);
   }
-  > .row {
+  > .cell {
     padding: 1rem;
+  }
+  .button {
+    border: 2px solid var(--primary);
+    background-color: transparent;
+    color: var(--primary);
+    padding: 4px;
+    margin: 0 0.5rem;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: var(--primary);
+      color: var(--background);
+    }
   }
 }

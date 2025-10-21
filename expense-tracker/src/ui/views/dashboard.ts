@@ -42,7 +42,7 @@ function BuildUI() {
 }
 
 function createSummaryTableHeaders(headElement: HTMLTableRowElement) {
-  const headings = ["DESCRIPTION", "AMOUNT", "DATE", "CATEGORY"];
+  const headings = ["DESCRIPTION", "AMOUNT", "DATE", "CATEGORY", "ACTIONS"];
   headings.forEach((heading) => {
     const el = document.createElement("th");
     el.classList.add(`${styles["expense-table-heading"]}`);
