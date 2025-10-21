@@ -36,6 +36,7 @@ function BuildUI() {
   createSummaryTableHeaders(headerRow);
 
   const tbody = document.createElement("tbody");
+  tbody.classList.add(styles["expense-table-body"]);
 
   table.append(thead, tbody);
   return { tbody, addExpenseForm, table };
