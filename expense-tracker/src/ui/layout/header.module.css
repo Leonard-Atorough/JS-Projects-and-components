@@ -1,4 +1,6 @@
 .header-banner {
+  position: sticky;
+  top: 0;
   color: var(--primary-50);
   box-shadow: 0 0 1rem var(--text-100);
   background-color: var(--primary-900);
