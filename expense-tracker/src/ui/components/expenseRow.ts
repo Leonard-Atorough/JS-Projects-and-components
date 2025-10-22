@@ -65,11 +65,13 @@ const attachClickHandlers = (row: HTMLTableRowElement) => {
   row.addEventListener("click", async (e) => {
     e.preventDefault();
     if ((e.target as HTMLElement).closest("#delete")) {
-      console.log((e.target as HTMLElement).closest("#delete"));
       (await appStore).setState((prev) => ({
         ...prev,
         expenses: prev.expenses.filter((x) => x.id !== row.id),
       }));
+    } else if ((e.target as HTMLElement).closest("#edit")) {
+      console.log("Edit clicked for", row.id);
+      document.dispatchEvent(new CustomEvent("edit-expense", { detail: row.id }));
     }
   });
 };

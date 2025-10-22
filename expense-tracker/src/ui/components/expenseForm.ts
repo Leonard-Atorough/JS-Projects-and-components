@@ -11,6 +11,7 @@ export const mountAddExpenseForm = (container: HTMLElement): Promise<void> => {
 
   container.append(formTitle, form);
 
+  attachEditHandler(form);
   return attachFormHandler(form);
 };
 
@@ -35,6 +36,21 @@ function attachFormHandler(form: HTMLFormElement): Promise<void> {
       form.reset();
       resolve();
     });
+  });
+}
+
+function attachEditHandler(form: HTMLFormElement): void {
+  document.addEventListener("edit-expense", async (e: Event) => {
+    const CustomEvent = e as CustomEvent;
+    const expenseid = CustomEvent.detail as string;
+    const expense = (await appStore).getState().expenses.find((x) => x.id === expenseid);
+    if (!expense) return;
+    (form.elements.namedItem("desc") as HTMLInputElement).value = expense.description;
+    (form.elements.namedItem("amount") as HTMLInputElement).value = (
+      expense.amountCents / 100
+    ).toFixed(2);
+    (form.elements.namedItem("date") as HTMLInputElement).value = expense.date;
+    (form.elements.namedItem("category") as HTMLSelectElement).value = expense.category ?? "";
   });
 }
 
