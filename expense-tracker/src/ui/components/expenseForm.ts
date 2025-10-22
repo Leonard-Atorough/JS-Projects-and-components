@@ -1,4 +1,4 @@
-import type { Expense } from "../../models/expense";
+import { createExpenseModel, type Expense } from "../../models/expense";
 import { appStore } from "../../state/store";
 
 import styles from "./expenseForm.module.css";
@@ -20,19 +20,32 @@ function attachFormHandler(form: HTMLFormElement): Promise<void> {
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
+      const id = form.id.length > 0 ? form.id : crypto.randomUUID();
       const fd = new FormData(form);
-      const newExpense: Expense = {
-        id: crypto.randomUUID(),
-        description: fd.get("desc") as string,
-        amountCents: Math.round(parseFloat(fd.get("amount") as string) * 100),
-        date: fd.get("date") as string,
-        category: fd.get("category") as string,
-      };
+      const newExpense: Expense = createExpenseModel(id, fd);
+      const { description, date, category } = newExpense;
+      console.log("Submitting expense", { description, date, category });
 
-      (await appStore).setState((prev) => ({
-        ...prev,
-        expenses: [...prev.expenses, newExpense],
-      }));
+      const existingExpenseIndex = (await appStore)
+        .getState()
+        .expenses.findIndex((x) => x.id === newExpense.id);
+      if (existingExpenseIndex !== -1) {
+        // Edit existing expense
+        (await appStore).setState((prev) => {
+          const updatedExpenses = [...prev.expenses];
+          updatedExpenses[existingExpenseIndex] = newExpense;
+          return {
+            ...prev,
+            expenses: updatedExpenses,
+          };
+        });
+      } else {
+        // Add new expense
+        (await appStore).setState((prev) => ({
+          ...prev,
+          expenses: [...prev.expenses, newExpense],
+        }));
+      }
       form.reset();
       resolve();
     });
@@ -45,6 +58,7 @@ function attachEditHandler(form: HTMLFormElement): void {
     const expenseid = CustomEvent.detail as string;
     const expense = (await appStore).getState().expenses.find((x) => x.id === expenseid);
     if (!expense) return;
+    form.id = expense.id;
     (form.elements.namedItem("desc") as HTMLInputElement).value = expense.description;
     (form.elements.namedItem("amount") as HTMLInputElement).value = (
       expense.amountCents / 100
