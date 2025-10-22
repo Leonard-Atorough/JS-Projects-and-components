@@ -1,4 +1,6 @@
 import { loadExpenseAsync, saveExpensesToLocal } from "../services/storage";
+import { createBatchExpenseSaver } from "./batch";
+
 import type { AppState } from "./types";
 
 export async function createStore(InitialPartial: Partial<AppState> = {}) {
@@ -7,28 +9,32 @@ export async function createStore(InitialPartial: Partial<AppState> = {}) {
     isLoading: false,
     ...InitialPartial,
   };
-  const listeners = new Set<(s: AppState) => void>();
+  const subscribers = new Set<(s: AppState) => void>();
+  const saver = createBatchExpenseSaver();
 
   const getState = (): AppState => ({ ...state });
 
   const setState = (updater: (prev: AppState) => AppState): void => {
     const newState = updater(state);
-    if (newState.expenses !== state.expenses) saveExpensesToLocal(newState.expenses);
+    if (newState.expenses !== state.expenses) {
+      saver.notify(newState.expenses);
+    }
     state = newState;
+    // Notify listeners
     emit();
   };
 
   const subscribe = (fn: (state: AppState) => void): (() => void) => {
-    listeners.add(fn);
+    subscribers.add(fn);
     fn(getState());
 
-    return () => listeners.delete(fn);
+    return () => subscribers.delete(fn);
   };
 
   const emit = () => {
     const snapshot = getState();
 
-    for (const listener of listeners) {
+    for (const listener of subscribers) {
       try {
         listener(snapshot);
       } catch (e) {
@@ -36,8 +42,13 @@ export async function createStore(InitialPartial: Partial<AppState> = {}) {
       }
     }
   };
+  const dispose = () => {
+    saver.flush();
+    saver.dispose();
+    subscribers.clear();
+  };
 
-  return { getState, setState, subscribe };
+  return { getState, setState, subscribe, dispose };
 }
 
 export const appStore = createStore();

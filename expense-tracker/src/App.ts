@@ -13,6 +13,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   initHeader(appRoot);
   initAside(appRoot);
-  const dashboardView = initDashboard();
-  initMain(appRoot, await dashboardView);
+  const { element: dashboard, cleanup } = await initDashboard();
+  initMain(appRoot, dashboard);
 });
+
+// Note: No need to explicitly handle unmounting in this simple app,
+// but if needed, you can call cleanup() from initDashboard when unmounting the dashboard view.
+// for example:
+// document.addEventListener("beforeunload", () => {
+//   // cleanup();
+// });

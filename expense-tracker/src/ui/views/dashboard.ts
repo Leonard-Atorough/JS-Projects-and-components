@@ -5,7 +5,10 @@ import { createExpenseTable } from "../components/expenseTable/expenseTable";
 
 import styles from "./dashboard.module.css";
 
-export async function initDashboard(): Promise<HTMLDivElement> {
+export async function initDashboard(): Promise<{
+  element: HTMLDivElement;
+  cleanup: () => void;
+}> {
   const { addExpenseForm, table } = BuildUI();
 
   const unsubscribe = (await appStore).subscribe((state) => {
@@ -20,7 +23,13 @@ export async function initDashboard(): Promise<HTMLDivElement> {
   dashboard.classList.add(styles["dashboard-view"]);
   dashboard.append(addExpenseForm, table);
 
-  return dashboard;
+  return {
+    element: dashboard,
+    cleanup: async () => {
+      unsubscribe();
+      (await appStore).dispose();
+    },
+  };
 }
 
 function BuildUI() {
