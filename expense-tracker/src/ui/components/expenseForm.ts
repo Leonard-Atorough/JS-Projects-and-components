@@ -35,6 +35,7 @@ function attachFormHandler(form: HTMLFormElement): Promise<void> {
         await addExpense(newExpense);
       }
       form.reset();
+      form.id = "";
       resolve();
     });
   });
