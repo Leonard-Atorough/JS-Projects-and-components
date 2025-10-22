@@ -23,32 +23,38 @@ function attachFormHandler(form: HTMLFormElement): Promise<void> {
       const id = form.id.length > 0 ? form.id : crypto.randomUUID();
       const fd = new FormData(form);
       const newExpense: Expense = createExpenseModel(id, fd);
-      const { description, date, category } = newExpense;
-      console.log("Submitting expense", { description, date, category });
 
       const existingExpenseIndex = (await appStore)
         .getState()
         .expenses.findIndex((x) => x.id === newExpense.id);
       if (existingExpenseIndex !== -1) {
         // Edit existing expense
-        (await appStore).setState((prev) => {
-          const updatedExpenses = [...prev.expenses];
-          updatedExpenses[existingExpenseIndex] = newExpense;
-          return {
-            ...prev,
-            expenses: updatedExpenses,
-          };
-        });
+        await editExpense(existingExpenseIndex, newExpense);
       } else {
         // Add new expense
-        (await appStore).setState((prev) => ({
-          ...prev,
-          expenses: [...prev.expenses, newExpense],
-        }));
+        await addExpense(newExpense);
       }
       form.reset();
       resolve();
     });
+  });
+}
+
+async function addExpense(newExpense: Expense) {
+  (await appStore).setState((prev) => ({
+    ...prev,
+    expenses: [...prev.expenses, newExpense],
+  }));
+}
+
+async function editExpense(existingExpenseIndex: number, newExpense: Expense) {
+  (await appStore).setState((prev) => {
+    const updatedExpenses = [...prev.expenses];
+    updatedExpenses[existingExpenseIndex] = newExpense;
+    return {
+      ...prev,
+      expenses: updatedExpenses,
+    };
   });
 }
 
@@ -76,14 +82,12 @@ function createForm(): HTMLFormElement {
     placeholder: "Description...",
     required: true,
   });
-
   const amountInput = createInput({
     name: "amount",
     type: "number",
     step: "0.01",
     required: true,
   });
-
   const dateInput = createInput({ name: "date", type: "date", required: true });
 
   const categorySelect = createCategorySelect();
