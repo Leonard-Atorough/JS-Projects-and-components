@@ -1,5 +1,3 @@
-import type { Expense } from "./expense";
-
 export interface Expense {
   id: string;
   description: string;
