@@ -64,6 +64,7 @@ function attachEditHandler(form: HTMLFormElement): void {
     const expenseid = CustomEvent.detail as string;
     const expense = (await appStore).getState().expenses.find((x) => x.id === expenseid);
     if (!expense) return;
+    form.reset();
     form.id = expense.id;
     (form.elements.namedItem("desc") as HTMLInputElement).value = expense.description;
     (form.elements.namedItem("amount") as HTMLInputElement).value = (
