@@ -1,5 +1,5 @@
-import type { Expense } from "../../models/expense";
-import { appStore } from "../../state/store";
+import type { Expense } from "../../../models/expense";
+import { appStore } from "../../../state/store";
 
 import styles from "./expenseRow.module.css";
 

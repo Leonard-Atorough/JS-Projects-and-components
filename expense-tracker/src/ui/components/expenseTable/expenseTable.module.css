@@ -1,0 +1,16 @@
+.expense-table {
+  border: 2px solid var(--primary);
+  width: 100%;
+}
+
+.expense-table-heading {
+  padding: 1rem;
+  background-color: var(--primary);
+  color: var(--background);
+  font-size: var(--font-size-1);
+}
+
+.expense-table-body {
+  max-height: 400px;
+  overflow-y: auto;
+}

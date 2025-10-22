@@ -1,7 +1,5 @@
 import { beforeEach, afterEach, describe, it, expect } from "vitest";
 import { mountAddExpenseForm } from "./expenseForm";
-import { appStore } from "../../state/store";
-import type { Expense } from "../../models/expense";
 
 let container: HTMLElement;
 

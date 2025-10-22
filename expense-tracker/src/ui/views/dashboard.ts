@@ -1,16 +1,18 @@
 import { appStore } from "../../state/store";
-import { mountAddExpenseForm } from "../components/expenseForm";
-import { createExpenseRow } from "../components/expenseRow";
+import { mountAddExpenseForm } from "../components/expenseForm/expenseForm";
+import { createExpenseRow } from "../components/expenseTable/expenseRow";
+import { createExpenseTable } from "../components/expenseTable/expenseTable";
 
 import styles from "./dashboard.module.css";
 
 export async function initDashboard(): Promise<HTMLDivElement> {
-  const { tbody, addExpenseForm, table } = BuildUI();
+  const { addExpenseForm, table } = BuildUI();
 
-  const usubscribe = (await appStore).subscribe((state) => {
-    tbody.innerHTML = "";
+  const unsubscribe = (await appStore).subscribe((state) => {
+    const tableBody = table.tBodies[0];
+    tableBody.innerHTML = "";
     state.expenses.forEach((expense, idx) =>
-      tbody.appendChild(createExpenseRow(expense, idx % 2 !== 0))
+      tableBody.appendChild(createExpenseRow(expense, idx % 2 !== 0))
     );
   });
 
@@ -27,27 +29,7 @@ function BuildUI() {
   addExpenseForm.className = styles["expense-form-container"];
   mountAddExpenseForm(addExpenseForm);
 
-  const table = document.createElement("table");
-  table.classList.add(styles["expense-table"]);
+  const table = createExpenseTable();
 
-  const thead = document.createElement("thead");
-  const headerRow = document.createElement("tr");
-  thead.appendChild(headerRow);
-  createSummaryTableHeaders(headerRow);
-
-  const tbody = document.createElement("tbody");
-  tbody.classList.add(styles["expense-table-body"]);
-
-  table.append(thead, tbody);
-  return { tbody, addExpenseForm, table };
-}
-
-function createSummaryTableHeaders(headElement: HTMLTableRowElement) {
-  const headings = ["DESCRIPTION", "AMOUNT", "DATE", "CATEGORY", "ACTIONS"];
-  headings.forEach((heading) => {
-    const el = document.createElement("th");
-    el.classList.add(`${styles["expense-table-heading"]}`);
-    el.textContent = heading;
-    headElement.appendChild(el);
-  });
+  return { addExpenseForm, table };
 }

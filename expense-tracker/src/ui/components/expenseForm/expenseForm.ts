@@ -1,5 +1,5 @@
-import { createExpenseModel, type Expense } from "../../models/expense";
-import { appStore } from "../../state/store";
+import { createExpenseModel, type Expense } from "../../../models/expense";
+import { appStore } from "../../../state/store";
 
 import styles from "./expenseForm.module.css";
 
@@ -149,5 +149,6 @@ function createCategorySelect(): HTMLSelectElement {
     option.textContent = category;
     select.appendChild(option);
   }
+
   return select;
 }
