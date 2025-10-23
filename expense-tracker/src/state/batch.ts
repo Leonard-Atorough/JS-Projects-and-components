@@ -1,14 +1,15 @@
 import type { Expense } from "../models/expense";
-import { saveExpensesToLocal } from "../services/storage";
+import { saveExpensesAsync } from "../services/storage";
 
 export function createBatchExpenseSaver(opts?: {
   delayMs?: number;
-  saveFn?: (expenses: Expense[]) => void;
+  saveFn?: (expenses: Expense[]) => Promise<number>;
+  expenses?: Expense[];
 }) {
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
   const DEBOUNCE_DELAY = opts?.delayMs ?? 500;
-  let latest: Expense[] = [];
-  const saveFn = opts?.saveFn ?? saveExpensesToLocal;
+  let latest: Expense[] = opts?.expenses ?? [];
+  const saveFn = opts?.saveFn ?? saveExpensesAsync;
 
   const flush = () => {
     if (timeoutId) {

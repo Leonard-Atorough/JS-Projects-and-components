@@ -1,4 +1,4 @@
-import { loadExpenseAsync, saveExpensesToLocal } from "../services/storage";
+import { loadExpenseAsync } from "../services/storage";
 import { createBatchExpenseSaver } from "./batch";
 
 import type { AppState } from "./types";
@@ -10,7 +10,7 @@ export async function createStore(InitialPartial: Partial<AppState> = {}) {
     ...InitialPartial,
   };
   const subscribers = new Set<(s: AppState) => void>();
-  const saver = createBatchExpenseSaver();
+  const saver = createBatchExpenseSaver({ expenses: state.expenses });
 
   const getState = (): AppState => ({ ...state });
 

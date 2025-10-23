@@ -1,6 +1,11 @@
 import { beforeEach, vi, describe, it, expect, afterEach } from "vitest";
 import type { Expense } from "../models/expense";
-import { loadExpenseAsync, loadExpensesFromLocal, saveExpensesToLocal } from "./storage";
+import {
+  saveExpensesAsync,
+  loadExpenseAsync,
+  loadExpenses,
+  saveExpenses,
+} from "./storage";
 import { createInMemoryLocalStorage } from "../__mocks__/createInMemoryLocalStorage";
 
 const key = "expenses";
@@ -30,7 +35,7 @@ describe("saveExpenses", () => {
         date: "2025-10-02",
       },
     ];
-    saveExpensesToLocal(sampleExpenses);
+    saveExpenses(sampleExpenses);
 
     const raw = localStorage.getItem(key);
     expect(raw).not.toBeNull();
@@ -57,17 +62,21 @@ describe("saveExpenses", () => {
       },
     ];
 
-    saveExpensesToLocal(firstExpense);
-    expect(JSON.parse(localStorage.getItem(key) as string)).toEqual(firstExpense);
+    saveExpenses(firstExpense);
+    expect(JSON.parse(localStorage.getItem(key) as string)).toEqual(
+      firstExpense
+    );
 
-    saveExpensesToLocal(secondExpense);
-    expect(JSON.parse(localStorage.getItem(key) as string)).toEqual(secondExpense);
+    saveExpenses(secondExpense);
+    expect(JSON.parse(localStorage.getItem(key) as string)).toEqual(
+      secondExpense
+    );
   });
 });
 
 describe("loadExpenses", () => {
   it("returns and empty array when nothing is stored", () => {
-    const result = loadExpensesFromLocal();
+    const result = loadExpenses();
     expect(result).toEqual([]);
   });
 
@@ -83,7 +92,7 @@ describe("loadExpenses", () => {
 
     localStorage.setItem(key, JSON.stringify(expense));
 
-    const loaded = loadExpensesFromLocal();
+    const loaded = loadExpenses();
     expect(loaded).toEqual(expense);
   });
 });
@@ -117,5 +126,21 @@ describe("loadExpensesAsync", () => {
     const promise = loadExpenseAsync();
 
     expect(promise).resolves.toEqual([]);
+  });
+});
+
+describe("SaveExpensesAsync", () => {
+  it("returns a promise object which resolves to a number", () => {
+    const expenses: Expense[] = [
+      {
+        id: "1",
+        description: "Coffee",
+        amountCents: 450,
+        date: "2025-10-01",
+      },
+    ];
+    const promise = saveExpensesAsync(expenses);
+
+    expect(promise).resolves.toEqual(1);
   });
 });
