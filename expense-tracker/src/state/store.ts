@@ -7,6 +7,8 @@ export async function createStore(InitialPartial: Partial<AppState> = {}) {
   let state: AppState = {
     expenses: await loadExpenseAsync(),
     isLoading: false,
+    mode: "create",
+    selectedExpenseId: null,
     ...InitialPartial,
   };
   const subscribers = new Set<(s: AppState) => void>();

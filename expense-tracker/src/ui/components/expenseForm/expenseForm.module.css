@@ -32,5 +32,9 @@ input {
     font-weight: 600;
     background-color: var(--primary);
     border: none;
+
+    &.-edit {
+      background-color: var(--accent);
+    }
   }
 }

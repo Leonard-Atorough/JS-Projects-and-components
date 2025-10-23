@@ -55,6 +55,8 @@ async function editExpense(existingExpenseIndex: number, newExpense: Expense) {
     return {
       ...prev,
       expenses: updatedExpenses,
+      selectedExpenseId: null,
+      mode: "create",
     };
   });
 }
@@ -62,10 +64,18 @@ async function editExpense(existingExpenseIndex: number, newExpense: Expense) {
 function attachEditHandler(form: HTMLFormElement): void {
   document.addEventListener("edit-expense", async (e: Event) => {
     const CustomEvent = e as CustomEvent;
-    const expenseid = CustomEvent.detail as string;
-    const expense = (await appStore).getState().expenses.find((x) => x.id === expenseid);
+
+    const stateInstance = (await appStore).getState();
+    stateInstance.mode = "edit";
+    stateInstance.selectedExpenseId = CustomEvent.detail as string;
+    const expense = (await appStore)
+      .getState()
+      .expenses.find((x) => x.id === stateInstance.selectedExpenseId);
+
     if (!expense) return;
+
     form.reset();
+
     form.id = expense.id;
     (form.elements.namedItem("desc") as HTMLInputElement).value = expense.description;
     (form.elements.namedItem("amount") as HTMLInputElement).value = (
@@ -73,6 +83,9 @@ function attachEditHandler(form: HTMLFormElement): void {
     ).toFixed(2);
     (form.elements.namedItem("date") as HTMLInputElement).value = expense.date;
     (form.elements.namedItem("category") as HTMLSelectElement).value = expense.category ?? "";
+    const button = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    button.textContent = "Edit";
+    button.classList.add(styles["-edit"]);
   });
 }
 

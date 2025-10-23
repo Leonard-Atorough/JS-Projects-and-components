@@ -37,6 +37,8 @@ describe("getState", () => {
         },
       ],
       isLoading: false,
+      mode: "create",
+      selectedExpenseId: null,
     });
 
     snapshot.isLoading = true;
