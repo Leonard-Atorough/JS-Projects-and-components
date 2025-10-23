@@ -4,22 +4,28 @@ import { initHeader } from "./ui/layout/header";
 import { initMain } from "./ui/layout/main";
 import { initDashboard } from "./ui/views/dashboard";
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const appRoot = document.getElementById("app");
-  if (!appRoot) {
-    console.error("Missing app root element: #app");
-    throw new Error("Missing #app container");
-  }
-
-  initHeader(appRoot);
-  initAside(appRoot);
+async function initApp(container: HTMLElement) {
+  initHeader(container);
+  initAside(container);
   const { element: dashboard, cleanup } = await initDashboard();
-  initMain(appRoot, dashboard);
-});
+  initMain(container, dashboard);
+  return cleanup;
+}
 
-// Note: No need to explicitly handle unmounting in this simple app,
-// but if needed, you can call cleanup() from initDashboard when unmounting the dashboard view.
-// for example:
-// document.addEventListener("beforeunload", () => {
-//   // cleanup();
-// });
+const run = async () => {
+  document.addEventListener("DOMContentLoaded", async () => {
+    const appRoot = document.getElementById("app");
+    if (!appRoot) {
+      console.error("Missing app root element: #app");
+      throw new Error("Missing #app container");
+    }
+
+    const cleanup = await initApp(appRoot);
+
+    // Optionally handle cleanup on unload
+    window.addEventListener("beforeunload", () => {
+      cleanup();
+    });
+  });
+};
+run();
