@@ -1,7 +1,12 @@
 const global = {
   currentPage: window.location.pathname,
   baseUrl: "https://api.themoviedb.org/3",
-  apiKey: "",
+  apiKey: "461d298c033d3bb1cd18d215ae26abdc",
+  requestHeaders: {
+    accept: "application/json",
+    Authorization:
+      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0NjFkMjk4YzAzM2QzYmIxY2QxOGQyMTVhZTI2YWJkYyIsIm5iZiI6MTc2MTUwNTUwNS4yNjgsInN1YiI6IjY4ZmU3MGUxNzdhMDliYjcxMGZiNmZmOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ihSVmja_QMKylFCLTJdhtKf7XZv5FxU_xsF9qVi7l0k",
+  },
 };
 
 function highlightActiveLink() {
@@ -39,15 +44,15 @@ async function displayPopularMovies() {
             ${
               movie.poster_path
                 ? `<img
-              src="https://image.tmdb.org/t/p/w500${movie.poster_path}"
-              class="card-img-top"
-              alt="${movie.title}"
-            />`
+                    src="https://image.tmdb.org/t/p/w500${movie.poster_path}"
+                    class="card-img-top"
+                    alt="${movie.title}"
+                />`
                 : `<img
-            src="./images/no-image.jpg"
-            class="card-img-top"
-            alt="${movie.title}"
-          />`
+                     src="./images/no-image.jpg"
+                    class="card-img-top"
+                    alt="${movie.title}"
+                />`
             }
           </a>
           <div class="card-body">
@@ -295,6 +300,51 @@ function displayBackgroundImage(type, path) {
   }
 }
 
+async function displaySlider() {
+  const container = document.querySelector(".swiper-wrapper");
+  container.innerHTML = "";
+  const endpoint = "/movie/now_playing";
+  const options = {
+    method: "GET",
+    accept: "application/json",
+    Authorization:
+      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0NjFkMjk4YzAzM2QzYmIxY2QxOGQyMTVhZTI2YWJkYyIsIm5iZiI6MTc2MTUwNTUwNS4yNjgsInN1YiI6IjY4ZmU3MGUxNzdhMDliYjcxMGZiNmZmOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ihSVmja_QMKylFCLTJdhtKf7XZv5FxU_xsF9qVi7l0k",
+  };
+
+  try {
+    const data = await fetchApiData(endpoint, options);
+    data.results.forEach((movie) => {
+      const div = document.createElement("div");
+      div.classList.add("swiper-slide");
+      div.innerHTML = `
+            <a href="movie-details.html?id=${movie.id}">
+                ${
+                  movie.poster_path
+                    ? `<img
+                    src="https://image.tmdb.org/t/p/w500${movie.poster_path}"
+                    class="card-img-top"
+                    alt="${movie.title}"
+                />`
+                    : `<img
+                    src="./images/no-image.jpg"
+                    class="card-img-top"
+                    alt="${movie.title}"
+                    />`
+                }
+            </a>
+                <h4 class="swiper-rating">
+                <i class="fas fa-star text-secondary"></i> ${movie.vote_average.toFixed(1)} / 10
+            </h4>
+        `;
+      container.appendChild(div);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+  initSwiper();
+  hideSpinner();
+}
+
 async function fetchApiData(endpoint, options) {
   showSpinner();
 
@@ -302,7 +352,7 @@ async function fetchApiData(endpoint, options) {
   const res = await fetch(url, options);
 
   if (res.status !== 200) {
-    throw new Error(`Failed to fetch resource at ${url}`);
+    throw new Error(`Failed to fetch resource at ${url}. See response: ${await res.json()}`);
   }
   return await res.json();
 }
@@ -313,10 +363,32 @@ const showSpinner = () => {
 const hideSpinner = () => {
   document.querySelector(".spinner").classList.remove("show");
 };
-
 const formatNumber = (number) => {
   console.log(number);
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(number);
+};
+const initSwiper = () => {
+  const swiper = new Swiper(".swiper", {
+    slidesPerView: 1,
+    spaceBetween: 30,
+    freeMode: true,
+    loop: true,
+    autoplay: {
+      delay: 4000,
+      disableOnInteraction: false,
+    },
+    breakpoints: {
+      500: {
+        slidesPerView: 2,
+      },
+      700: {
+        slidesPerView: 3,
+      },
+      1200: {
+        slidesPerView: 4,
+      },
+    },
+  });
 };
 
 function initApp() {
@@ -325,6 +397,7 @@ function initApp() {
     case "/flixx-movie/":
     case "/flixx-movie/index.html":
       displayPopularMovies();
+      displaySlider();
       console.log("home");
       break;
     case "/flixx-movie/shows.html":

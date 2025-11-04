@@ -36,7 +36,12 @@ function attachFormHandler(form: HTMLFormElement): Promise<void> {
       }
       form.reset();
       form.id = "";
-      resolve();
+
+      const button = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+      button.textContent = "Add";
+      button.classList.remove(styles["-edit"]);
+
+      if (button) resolve();
     });
   });
 }

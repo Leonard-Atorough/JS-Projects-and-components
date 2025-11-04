@@ -28,6 +28,29 @@ export const createExpenseRow = (
   return tableRow;
 };
 
+export const createExpenseRow2 = (
+  expense: Expense,
+  isAlternative: boolean
+): HTMLTableRowElement => {
+  const tableRow = document.createElement("tr");
+  tableRow.id = expense.id;
+  tableRow.classList.add(styles["expense-table-row"]);
+  if (isAlternative) tableRow.classList.add(`${styles["-alternate"]}`);
+  tableRow.innerHTML = `
+    <td class=${styles.cell}>${expense.description}</td>
+    <td class=${styles.cell}>${(expense.amountCents / 100).toFixed(2).toString()}</td>
+    <td class=${styles.cell}>${expense.date}</td>
+    <td class=${styles.cell}>${expense.category ?? "(Empty)"}</td>
+    <td class=${styles.cell}>
+    ${addButton({ name: "edit", icon: "fa-solid fa-pencil" })}
+    ${addButton({ name: "delete", icon: "fa-solid fa-trash" })}
+    </td>
+  `;
+  attachClickHandlers(tableRow);
+
+  return tableRow;
+};
+
 const createTableCell = (options: { content: string }): HTMLTableCellElement => {
   const cell = document.createElement("td");
   cell.textContent = options.content;
@@ -39,26 +62,28 @@ const createTableActionsRow = (): HTMLTableCellElement => {
   const cell = document.createElement("td");
   cell.classList.add(styles.cell);
 
-  addButton(cell, { name: "edit", icon: "fa-solid fa-pencil" });
-  addButton(cell, { name: "delete", icon: "fa-solid fa-trash" });
+  // addButton(cell, { name: "edit", icon: "fa-solid fa-pencil" });
+  // addButton(cell, { name: "delete", icon: "fa-solid fa-trash" });
 
   return cell;
 };
 
 const addButton = (
-  parent: HTMLTableCellElement,
+  // parent: HTMLTableCellElement,
   options: {
     name: string;
     icon: string;
   }
-): void => {
+): string => {
   const button = document.createElement("button");
   button.id = options.name;
   button.classList.add(styles.button);
   const icon = document.createElement("i");
   icon.className = options.icon;
   button.appendChild(icon);
-  parent.appendChild(button);
+  // parent.appendChild(button);
+
+  return button.outerHTML;
 };
 
 const attachClickHandlers = (row: HTMLTableRowElement) => {
