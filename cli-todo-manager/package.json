@@ -1,0 +1,23 @@
+{
+  "name": "cli-todo-manager",
+  "version": "1.0.0",
+  "description": "A simple todo list manager than writes to a database (SQLite). Supports crud operations, searching and filtering, and more.",
+  "keywords": [
+    "Todo",
+    "manage",
+    "list"
+  ],
+  "license": "ISC",
+  "author": "Leonard Atorough",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "dependencies": {
+    "node": "^25.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0"
+  }
+}
